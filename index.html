@@ -1,822 +1,396 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearnVerse | Premium Education Platform</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Animation Library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ржирж╛ржорж╛ржЬ ржмрж╛ржВрж▓рж╛ржжрзЗрж╢ ЁЯЗзЁЯЗй</title>
     
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --accent: #8b5cf6;
-            --bg-light: #f8fafc;
-            --bg-dark: #0f172a;
-            --glass-light: rgba(255, 255, 255, 0.7);
-            --glass-dark: rgba(15, 23, 42, 0.8);
-            --text-light: #1e293b;
-            --text-dark: #f1f5f9;
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --transition: all 0.3s ease;
+            --primary: #004d40;
+            --secondary: #00695c;
+            --accent: #d4af37;
+            --bg: #f0f4f3;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --danger: #e74c3c;
         }
 
         [data-theme="dark"] {
-            --bg-main: var(--bg-dark);
-            --text-main: var(--text-dark);
-            --glass: var(--glass-dark);
-            --nav-bg: rgba(15, 23, 42, 0.9);
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #ecf0f1;
         }
 
-        [data-theme="light"] {
-            --bg-main: var(--bg-light);
-            --text-main: var(--text-light);
-            --glass: var(--glass-light);
-            --nav-bg: rgba(255, 255, 255, 0.9);
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --border: rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            transition: var(--transition);
-            overflow-x: hidden;
-            line-height: 1.6;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: 0.3s;
+            padding-bottom: 80px;
         }
 
-        /* --- Custom Scrollbar --- */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 5px;
-        }
-
-        /* --- Loading Overlay --- */
+        /* рж▓рзЛржбрж╛рж░ */
         #loader {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- Navigation --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
+            position: fixed; inset: 0; background: var(--primary);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white;
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 30px 20px 60px;
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            text-align: center;
         }
 
-        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        .nav-links a:hover { color: var(--primary); }
+        .container { padding: 0 15px; margin-top: -40px; }
 
-        .nav-btns { display: flex; gap: 1rem; align-items: center; }
+        .main-card {
+            background: var(--card); border-radius: 20px; padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center;
+        }
+
+        .next-prayer-name { font-size: 2rem; color: var(--primary); font-weight: 700; margin: 5px 0; }
+        .countdown { font-family: 'Poppins'; font-size: 1.5rem; color: var(--danger); font-weight: 600; }
+
+        .prayer-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+        }
+
+        .prayer-item {
+            background: var(--card); padding: 15px; border-radius: 15px;
+            display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .prayer-item.active { border: 2px solid var(--primary); background: #e0f2f1; }
+        .prayer-time { font-weight: 700; font-size: 1.1rem; margin-top: 5px; }
+
+        .prohibited-zone {
+            background: #ffecb3; color: #856404; padding: 10px;
+            border-radius: 10px; margin-bottom: 15px; display: none; font-weight: bold;
+        }
+
+        /* ржмржЯржо ржирзНржпрж╛ржнрж┐ржЧрзЗрж╢ржи */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--card); height: 70px; display: flex;
+            justify-content: space-around; align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        .nav-item { text-decoration: none; color: #95a5a6; text-align: center; font-size: 0.75rem; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+
+        .page { display: none; animation: fadeIn 0.4s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* рждрж╛рж╕ржмрж┐рж╣ */
+        .tasbih-btn {
+            width: 200px; height: 200px; border-radius: 50%;
+            background: var(--primary); color: white; border: 8px solid var(--accent);
+            font-size: 3rem; margin: 30px auto; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; user-select: none;
+        }
+
         .btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-
-        #theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-size: 1.3rem;
-            cursor: pointer;
+            background: var(--primary); color: white; border: none;
+            padding: 12px 20px; border-radius: 10px; width: 100%; font-size: 1rem;
+            cursor: pointer; margin-top: 10px;
         }
 
-        /* --- Hero Section --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 10%;
-            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent),
-                        radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent);
+        select {
+            width: 100%; padding: 12px; border-radius: 10px; margin: 10px 0;
+            font-size: 1rem; border: 1px solid #ddd;
         }
-
-        .hero-content h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-        .hero-content p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        /* --- Search Bar --- */
-        .search-container {
-            max-width: 700px;
-            margin: -2rem auto 4rem;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 10;
-        }
-        .search-box {
-            display: flex;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            box-shadow: var(--card-shadow);
-        }
-        .search-box input {
-            flex: 1;
-            background: none;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            color: var(--text-main);
-            outline: none;
-            font-size: 1rem;
-        }
-
-        /* --- Categories --- */
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 4rem;
-            padding: 0 5%;
-        }
-        .cat-badge {
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .cat-badge:hover, .cat-badge.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* --- Card Grid --- */
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2.5rem;
-            padding: 0 5% 5rem;
-        }
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-            position: relative;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--card-shadow);
-        }
-        .card-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .card-body { padding: 1.5rem; }
-        .card-tag {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .card-title { margin-bottom: 1rem; font-size: 1.25rem; }
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-        .fav-btn {
-            background: none;
-            border: none;
-            color: #ff4757;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        /* --- Modals --- */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            padding: 20px;
-        }
-        .modal {
-            background: var(--bg-main);
-            width: 100%;
-            max-width: 500px;
-            border-radius: 24px;
-            padding: 2.5rem;
-            position: relative;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
-        }
-        .modal-close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text-main);
-            outline: none;
-        }
-
-        /* --- Admin & Dashboard Views --- */
-        .page-content { display: none; padding: 100px 5% 50px; min-height: 100vh; }
-        .page-active { display: block; }
         
-        .admin-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+        .dua-card {
+            background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px;
+            text-align: right;
         }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        .admin-table th, .admin-table td {
-            padding: 1.2rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        .admin-table tr:hover { background: rgba(99, 102, 241, 0.05); }
-
-        /* --- Stats/Dashboard --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        .stat-card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-        .stat-card h3 { font-size: 2.5rem; color: var(--primary); }
-
-        /* --- Footer --- */
-        footer {
-            background: var(--nav-bg);
-            padding: 5rem 5% 2rem;
-            border-top: 1px solid var(--border);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-        .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-        .social-links a:hover { transform: translateY(-5px); }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
-            .grid-container { grid-template-columns: 1fr; }
-            .admin-table { display: block; overflow-x: auto; }
-        }
+        .arabic { font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
+        .bangla { text-align: left; font-size: 0.95rem; }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-    <!-- Loading Screen -->
-    <div id="loader"><div class="spinner"></div></div>
+    <!-- рж▓рзЛржбрж╛рж░ рж╕рзНржХрзНрж░рж┐ржи -->
+    <div id="loader">
+        <i class="fas fa-mosque fa-3x" style="margin-bottom: 20px;"></i>
+        <h2>ржирж╛ржорж╛ржЬ ржмрж╛ржВрж▓рж╛ржжрзЗрж╢</h2>
+        <p>ржПржХржЯрзБ ржЕржкрзЗржХрзНрж╖рж╛ ржХрж░рзБржи...</p>
+    </div>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo" onclick="showPage('home')">LearnVerse</div>
-        <ul class="nav-links">
-            <li><a href="#" onclick="showPage('home')">Home</a></li>
-            <li><a href="#courses" onclick="showPage('home')">Courses</a></li>
-            <li><a href="#books" onclick="showPage('home')">Books</a></li>
-            <li><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
-        </ul>
-        <div class="nav-btns">
-            <button id="theme-toggle"><i class="fas fa-moon"></i></button>
-            <button class="btn btn-outline" onclick="toggleModal('login-modal')">Login</button>
-            <button class="btn btn-primary" onclick="toggleModal('signup-modal')">Join Free</button>
+    <header id="main-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div id="current-location-text"><i class="fas fa-location-dot"></i> ржврж╛ржХрж╛</div>
+            <div id="hijri-date-text">-- рж╣рж┐ржЬрж░рж┐</div>
         </div>
+        <div style="margin-top: 20px;">
+            <h1 id="clock" style="font-size: 2.5rem; font-family: 'Poppins';">00:00:00</h1>
+            <p id="full-date">-- --- ----</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- рж╣рзЛржо ржкрзЗржЬ -->
+        <section id="home" class="page active">
+            <div class="main-card">
+                <div id="prohibited-notice" class="prohibited-zone">ржмрж░рзНрждржорж╛ржирзЗ ржирж╛ржорж╛ржЬ ржкрзЬрж╛ ржирж┐рж╖рж┐ржжрзНржз</div>
+                <p>ржкрж░ржмрж░рзНрждрзА ржУрзЯрж╛ржХрзНржд</p>
+                <h2 id="next-prayer-name" class="next-prayer-name">--</h2>
+                <div id="next-prayer-countdown" class="countdown">00:00:00</div>
+            </div>
+
+            <div class="prayer-grid">
+                <div class="prayer-item" id="p-fajr"><span>ржлржЬрж░</span><div class="prayer-time" id="t-fajr">--:--</div></div>
+                <div class="prayer-item" id="p-sunrise"><span>рж╕рзВрж░рзНржпрзЛржжрзЯ</span><div class="prayer-time" id="t-sunrise">--:--</div></div>
+                <div class="prayer-item" id="p-dhuhr"><span>ржпрзЛрж╣рж░</span><div class="prayer-time" id="t-dhuhr">--:--</div></div>
+                <div class="prayer-item" id="p-asr"><span>ржЖрж╕рж░</span><div class="prayer-time" id="t-asr">--:--</div></div>
+                <div class="prayer-item" id="p-maghrib"><span>ржорж╛ржЧрж░рж┐ржм</span><div class="prayer-time" id="t-maghrib">--:--</div></div>
+                <div class="prayer-item" id="p-isha"><span>ржПрж╢рж╛</span><div class="prayer-time" id="t-isha">--:--</div></div>
+            </div>
+        </section>
+
+        <!-- ржХрж┐ржмрж▓рж╛ ржкрзЗржЬ -->
+        <section id="qibla" class="page">
+            <div class="main-card">
+                <h3>ржХрж┐ржмрж▓рж╛ ржХржорзНржкрж╛рж╕</h3>
+                <p style="font-size: 0.8rem; margin-bottom: 20px;">ржЖржкржирж╛рж░ ржбрж┐ржнрж╛ржЗрж╕ржЯрж┐ рж╕ржорж╛ржирзНрждрж░рж╛рж▓ рж░рж╛ржЦрзБржи</p>
+                <div id="compass-container" style="position: relative; width: 200px; margin: 0 auto;">
+                    <img src="https://i.ibb.co/mS796Vv/compass.png" id="compass-img" style="width: 100%; transition: 0.1s;">
+                    <i class="fas fa-kaaba" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); color: black; font-size: 1.5rem;"></i>
+                </div>
+                <button class="btn" onclick="startCompass()" style="margin-top: 20px;">ржХржорзНржкрж╛рж╕ ржЪрж╛рж▓рзБ ржХрж░рзБржи</button>
+            </div>
+        </section>
+
+        <!-- рждрж╛рж╕ржмрж┐рж╣ ржкрзЗржЬ -->
+        <section id="tasbih" class="page">
+            <div class="main-card">
+                <h3 id="dhikr-name">рж╕рзБржмрж╣рж╛ржирж╛рж▓рзНрж▓рж╛рж╣</h3>
+                <div class="tasbih-btn" id="tasbih-display" onclick="countTasbih()">0</div>
+                <button class="btn" onclick="resetTasbih()" style="background: #7f8c8d;">рж░рж┐рж╕рзЗржЯ</button>
+                <select onchange="document.getElementById('dhikr-name').innerText = this.value">
+                    <option>рж╕рзБржмрж╣рж╛ржирж╛рж▓рзНрж▓рж╛рж╣</option>
+                    <option>ржЖрж▓рж╣рж╛ржоржжрзБрж▓рж┐рж▓рзНрж▓рж╛рж╣</option>
+                    <option>ржЖрж▓рзНрж▓рж╛рж╣рзБ ржЖржХржмрж╛рж░</option>
+                    <option>рж▓рж╛ ржЗрж▓рж╛рж╣рж╛ ржЗрж▓рзНрж▓рж╛рж▓рзНрж▓рж╛рж╣</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- ржжрзЛрзЯрж╛ ржкрзЗржЬ -->
+        <section id="dua" class="page">
+            <h3 style="margin-bottom: 15px;">ржкрзНрж░рзЯрзЛржЬржирзАрзЯ ржжрзЛрзЯрж╛</h3>
+            <div id="dua-container">
+                <!-- ржжрзЛржпрж╝рж╛рж╕ ржПржЦрж╛ржирзЗ рж▓рзЛржб рж╣ржмрзЗ -->
+            </div>
+        </section>
+
+        <!-- рж╕рзЗржЯрж┐ржВрж╕ ржкрзЗржЬ -->
+        <section id="settings" class="page">
+            <div class="main-card" style="text-align: left;">
+                <h3>рж╕рзЗржЯрж┐ржВрж╕</h3>
+                <label>ржЖржкржирж╛рж░ ржЬрзЗрж▓рж╛ ржирж┐рж░рзНржмрж╛ржЪржи ржХрж░рзБржи</label>
+                <select id="district-select" onchange="changeDistrict(this.value)">
+                    <!-- рзмрзк ржЬрзЗрж▓рж╛ ржЬрж╛ржнрж╛рж╕рзНржХрзНрж░рж┐ржкрзНржЯ ржерзЗржХрзЗ ржЖрж╕ржмрзЗ -->
+                </select>
+                <button class="btn" onclick="toggleDarkMode()">ржбрж╛рж░рзНржХ/рж▓рж╛ржЗржЯ ржорзЛржб ржкрж░рж┐ржмрж░рзНрждржи</button>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="nav(event, 'home')"><i class="fas fa-home"></i>рж╣рзЛржо</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'qibla')"><i class="fas fa-compass"></i>ржХрж┐ржмрж▓рж╛</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'tasbih')"><i class="fas fa-dharmachakra"></i>рждрж╛рж╕ржмрж┐рж╣</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'dua')"><i class="fas fa-hands-praying"></i>ржжрзЛрзЯрж╛</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'settings')"><i class="fas fa-cog"></i>рж╕рзЗржЯрж┐ржВрж╕</a>
     </nav>
 
-    <!-- HOME PAGE -->
-    <div id="home-page" class="page-content page-active">
-        <section class="hero animate__animated animate__fadeIn">
-            <div class="hero-content">
-                <h1>Master New Skills with <br><span style="color:var(--primary)">Premium Learning</span></h1>
-                <p>Access 1000+ high-quality courses and books curated by industry experts. Start your journey into AI, Tech, and more today.</p>
-                <div class="hero-btns">
-                    <button class="btn btn-primary" onclick="window.scrollTo(0, 800)">Explore Library</button>
-                    <button class="btn btn-outline" style="margin-left: 1rem;">How it works</button>
-                </div>
-            </div>
-        </section>
-
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search" style="padding: 1rem; opacity: 0.5;"></i>
-                <input type="text" id="main-search" placeholder="Search for 'Python for AI' or 'Advanced Physics'..." onkeyup="filterItems()">
-            </div>
-        </div>
-
-        <div class="categories">
-            <div class="cat-badge active" onclick="filterCategory('All', this)">All</div>
-            <div class="cat-badge" onclick="filterCategory('Programming', this)">Programming</div>
-            <div class="cat-badge" onclick="filterCategory('AI', this)">AI</div>
-            <div class="cat-badge" onclick="filterCategory('Mathematics', this)">Mathematics</div>
-            <div class="cat-badge" onclick="filterCategory('Science', this)">Science</div>
-            <div class="cat-badge" onclick="filterCategory('Technology', this)">Technology</div>
-        </div>
-
-        <h2 class="section-title" id="courses">Featured Courses</h2>
-        <div id="courses-grid" class="grid-container">
-            <!-- Dynamic Courses -->
-        </div>
-
-        <h2 class="section-title" id="books">E-Book Library</h2>
-        <div id="books-grid" class="grid-container">
-            <!-- Dynamic Books -->
-        </div>
-
-        <!-- FAQ Section -->
-        <section style="padding: 5rem 10%;">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div style="max-width: 800px; margin: 0 auto;">
-                <details style="margin-bottom: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 15px;">
-                    <summary style="font-weight: 600; cursor: pointer;">Are the certificates industry-recognized?</summary>
-                    <p style="margin-top:1rem; opacity: 0.8;">Yes, every course completion includes a verified certificate that you can share on LinkedIn or with employers.</p>
-                </details>
-                <details style="margin-bottom: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 15px;">
-                    <summary style="font-weight: 600; cursor: pointer;">Can I access the content offline?</summary>
-                    <p style="margin-top:1rem; opacity: 0.8;">Our E-books can be downloaded as PDFs, and video lessons can be saved within the mobile app.</p>
-                </details>
-            </div>
-        </section>
-
-        <!-- Testimonials -->
-        <section style="padding: 5rem 5%; background: rgba(99, 102, 241, 0.03);">
-            <h2 class="section-title">What Our Students Say</h2>
-            <div class="grid-container">
-                <div class="card card-body">
-                    <p>"LearnVerse changed my career. The AI course was phenomenal and helped me land a job at a top tech firm."</p>
-                    <h4 style="margin-top:1rem;">- Sarah Jenkins</h4>
-                </div>
-                <div class="card card-body">
-                    <p>"The best UI I've ever seen in an EdTech platform. Everything is so smooth and the content is premium."</p>
-                    <h4 style="margin-top:1rem;">- David Chen</h4>
-                </div>
-                <div class="card card-body">
-                    <p>"I love the E-book library. Being able to read high-quality tech books for free is a game changer."</p>
-                    <h4 style="margin-top:1rem;">- Michael Ross</h4>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- STUDENT DASHBOARD -->
-    <div id="dashboard-page" class="page-content">
-        <h1 class="section-title">My Dashboard</h1>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>4</h3>
-                <p>Enrolled Courses</p>
-            </div>
-            <div class="stat-card">
-                <h3>12</h3>
-                <p>Books Read</p>
-            </div>
-            <div class="stat-card">
-                <h3>85%</h3>
-                <p>Avg. Progress</p>
-            </div>
-        </div>
-        <h2 style="margin-bottom: 2rem;">My Favorites</h2>
-        <div id="favorites-grid" class="grid-container">
-            <!-- Favorites Rendered Here -->
-        </div>
-    </div>
-
-    <!-- ADMIN PANEL -->
-    <div id="admin-page" class="page-content">
-        <div class="admin-controls">
-            <h1>Admin Management</h1>
-            <button class="btn btn-primary" onclick="openItemModal()">Add New Item</button>
-        </div>
-        <div style="overflow-x: auto;">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Type</th>
-                        <th>Category</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-table-body">
-                    <!-- Dynamic Table Rows -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- MODALS -->
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal">
-            <span class="modal-close" onclick="toggleModal('login-modal')">&times;</span>
-            <h2 style="margin-bottom: 1.5rem;">Welcome Back</h2>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" placeholder="name@example.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" placeholder="••••••••">
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="toggleModal('login-modal')">Sign In</button>
-        </div>
-    </div>
-
-    <!-- Signup Modal -->
-    <div id="signup-modal" class="modal-overlay">
-        <div class="modal">
-            <span class="modal-close" onclick="toggleModal('signup-modal')">&times;</span>
-            <h2 style="margin-bottom: 1.5rem;">Create Account</h2>
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" placeholder="John Doe">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" placeholder="name@example.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" placeholder="••••••••">
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="toggleModal('signup-modal')">Get Started</button>
-        </div>
-    </div>
-
-    <!-- Add/Edit Item Modal -->
-    <div id="item-modal" class="modal-overlay">
-        <div class="modal">
-            <span class="modal-close" onclick="closeItemModal()">&times;</span>
-            <h2 id="modal-title" style="margin-bottom: 1.5rem;">Add Content</h2>
-            <input type="hidden" id="edit-id">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="item-title" required>
-            </div>
-            <div class="form-group">
-                <label>Type</label>
-                <select id="item-type">
-                    <option value="course">Course</option>
-                    <option value="book">Book</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Category</label>
-                <select id="item-category">
-                    <option value="Programming">Programming</option>
-                    <option value="AI">AI</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science</option>
-                    <option value="Technology">Technology</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Image URL</label>
-                <input type="text" id="item-image" placeholder="https://unsplash.com/...">
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="saveItem()">Save Content</button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <div class="logo">LearnVerse</div>
-                <p style="margin-top:1rem; opacity: 0.7;">The world's leading premium educational platform for tech and science enthusiasts.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                </div>
-            </div>
-            <div>
-                <h3>Quick Links</h3>
-                <ul style="list-style:none; margin-top:1.5rem;">
-                    <li><a href="#" onclick="showPage('home')" style="color:inherit; text-decoration:none;">Library</a></li>
-                    <li><a href="#" onclick="showPage('dashboard')" style="color:inherit; text-decoration:none;">Dashboard</a></li>
-                    <li><a href="#" onclick="checkAdminAccess()" style="color:inherit; text-decoration:none;">Admin Panel</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3>Newsletter</h3>
-                <p style="margin:1rem 0; opacity: 0.7;">Get latest course updates.</p>
-                <div class="search-box" style="margin:0;">
-                    <input type="text" placeholder="Your Email">
-                    <button class="btn btn-primary" style="border-radius: 50px;">Sub</button>
-                </div>
-            </div>
-        </div>
-        <div style="text-align:center; padding-top:2rem; border-top:1px solid var(--border); opacity: 0.5; font-size: 0.9rem;">
-            &copy; 2024 LearnVerse. All Rights Reserved.
-        </div>
-    </footer>
-
     <script>
-        // --- Data Management & Initialization ---
-        let items = JSON.parse(localStorage.getItem('lv_items')) || [
-            { id: 1, title: 'Advanced Python Mastery', type: 'course', category: 'Programming', img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=500&q=80', fav: false },
-            { id: 2, title: 'Introduction to Quantum Physics', type: 'book', category: 'Science', img: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=500&q=80', fav: true },
-            { id: 3, title: 'UI/UX Design Principles', type: 'course', category: 'Technology', img: 'https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?auto=format&fit=crop&w=500&q=80', fav: false },
-            { id: 4, title: 'Machine Learning Basics', type: 'course', category: 'AI', img: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=500&q=80', fav: false },
-            { id: 5, title: 'The AI Revolution', type: 'book', category: 'AI', img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=500&q=80', fav: false },
-            { id: 6, title: 'Calculus for Engineers', type: 'book', category: 'Mathematics', img: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=500&q=80', fav: false }
+        // ржбрзЗржЯрж╛ржмрзЗрж╕
+        const districts = {
+            "Dhaka": [23.8103, 90.4125, "ржврж╛ржХрж╛"], "Chattogram": [22.3569, 91.7832, "ржЪржЯрзНржЯржЧрзНрж░рж╛ржо"],
+            "Sylhet": [24.8949, 91.8687, "рж╕рж┐рж▓рзЗржЯ"], "Rajshahi": [24.3745, 88.6042, "рж░рж╛ржЬрж╢рж╛рж╣рзА"],
+            "Khulna": [22.8456, 89.5403, "ржЦрзБрж▓ржирж╛"], "Barishal": [22.7010, 90.3535, "ржмрж░рж┐рж╢рж╛рж▓"],
+            "Rangpur": [25.7439, 89.2752, "рж░ржВржкрзБрж░"], "Mymensingh": [24.7471, 90.4203, "ржорзЯржоржирж╕рж┐ржВрж╣"],
+            "Cumilla": [23.4607, 91.1809, "ржХрзБржорж┐рж▓рзНрж▓рж╛"], "Gazipur": [24.0023, 90.4264, "ржЧрж╛ржЬрзАржкрзБрж░"],
+            "Narayanganj": [23.6238, 90.5000, "ржирж╛рж░рж╛рзЯржгржЧржЮрзНржЬ"], "Bogra": [24.8481, 89.3730, "ржмржЧрзБрзЬрж╛"]
+            // ржЖрж░ржУ ржЬрзЗрж▓рж╛ ржПржЦрж╛ржирзЗ ржпрзБржХрзНржд ржХрж░рж╛ ржпрж╛рзЯ
+        };
+
+        const prayers = [
+            {id: 'fajr', name: 'ржлржЬрж░', time: '04:35'},
+            {id: 'sunrise', name: 'рж╕рзВрж░рзНржпрзЛржжрзЯ', time: '05:55'},
+            {id: 'dhuhr', name: 'ржпрзЛрж╣рж░', time: '12:05'},
+            {id: 'asr', name: 'ржЖрж╕рж░', time: '16:35'},
+            {id: 'maghrib', name: 'ржорж╛ржЧрж░рж┐ржм', time: '18:25'},
+            {id: 'isha', name: 'ржПрж╢рж╛', time: '19:45'}
         ];
 
-        // --- Core UI Functions ---
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                if(loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
+        const duas = [
+            {a: "╪и┘Р╪│┘Т┘Е┘Р ╪з┘Д┘Д┘О┘С┘З┘Р", b: "ржмрж┐рж╕ржорж┐рж▓рзНрж▓рж╛рж╣", m: "ржЖрж▓рзНрж▓рж╛рж╣рж░ ржирж╛ржорзЗ рж╢рзБрж░рзБ ржХрж░ржЫрж┐ред"},
+            {a: "╪▒┘О╪и┘Р┘С ╪▓┘Р╪п┘Т┘Ж┘Р┘К ╪╣┘Р┘Д┘Т┘Е┘Л╪з", b: "рж░рж╛ржмрзНржмрж┐ ржЬрж┐ржжржирж┐ ржЗрж▓ржорж╛", m: "рж╣рзЗ ржЖржорж╛рж░ ржкрзНрж░ржнрзБ! ржЖржорж╛рж░ ржЬрзНржЮрж╛ржи ржмрж╛рзЬрж┐рзЯрзЗ ржжрж┐ржиред"},
+            {a: "╪▒┘О╪и┘Р┘С ╪з╪▒┘Т╪н┘О┘Е┘Т┘З┘П┘Е┘О╪з ┘Г┘О┘Е┘О╪з ╪▒┘О╪и┘О┘С┘К┘О╪з┘Ж┘Р┘К ╪╡┘О╪║┘Р┘К╪▒┘Л╪з", b: "рж░рж╛ржмрзНржмрж┐рж░ рж╣рж╛ржорж╣рзБржорж╛ ржХрж╛ржорж╛ рж░рж╛ржмрзНржмрж╛ржпрж╝рж╛ржирж┐ рж╕рж╛ржЧрж┐рж░рж╛", m: "рж╣рзЗ ржЖржорж╛рж░ ржкрзНрж░рждрж┐ржкрж╛рж▓ржХ! рждрж╛ржБржжрзЗрж░ ржЙржнрзЯрзЗрж░ ржкрзНрж░рждрж┐ ржжрзЯрж╛ ржХрж░рзБржи ржпрзЗржоржи рждрж╛ржБрж░рж╛ ржЖржорж╛ржХрзЗ рж╢рзИрж╢ржмрзЗ рж▓рж╛рж▓ржи-ржкрж╛рж▓ржи ржХрж░рзЗржЫрзЗржиред"}
+        ];
+
+        let state = {
+            district: 'Dhaka',
+            tasbih: 0,
+            dark: false
+        };
+
+        // ржЕрзНржпрж╛ржк рж╢рзБрж░рзБ
+        window.onload = function() {
+            try {
+                initApp();
+            } catch (e) {
+                console.error(e);
+            } finally {
+                // рзи рж╕рзЗржХрзЗржирзНржб ржкрж░ рж▓рзЛржбрж╛рж░ ржмржирзНржз рж╣ржмрзЗржЗ рж╣ржмрзЗ
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 2000);
+            }
+        };
+
+        function initApp() {
+            // ржЬрзЗрж▓рж╛ рж▓рж┐рж╕рзНржЯ рж▓рзЛржб
+            const select = document.getElementById('district-select');
+            for(let key in districts) {
+                let opt = document.createElement('option');
+                opt.value = key;
+                opt.innerText = districts[key][2];
+                select.appendChild(opt);
+            }
+
+            // ржжрзЛрзЯрж╛ рж▓рзЛржб
+            const duaBox = document.getElementById('dua-container');
+            duas.forEach(d => {
+                duaBox.innerHTML += `<div class="dua-card">
+                    <div class="arabic">${d.a}</div>
+                    <div class="bangla"><b>ржЙржЪрзНржЪрж╛рж░ржг:</b> ${d.b}<br><b>ржЕрж░рзНрже:</b> ${d.m}</div>
+                </div>`;
+            });
+
+            // ржШрзЬрж┐ ржУ ржирж╛ржорж╛ржЬ ржЖржкржбрзЗржЯ рж╢рзБрж░рзБ
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('bn-BD');
+            document.getElementById('full-date').innerText = now.toLocaleDateString('bn-BD', {day:'numeric', month:'long', year:'numeric'});
+
+            // ржирж╛ржорж╛ржЬрзЗрж░ рж╕ржорзЯ ржЖржкржбрзЗржЯ (ржХрж╛рж▓рзНржкржирж┐ржХ ржЕржлрж╕рзЗржЯрж╕рж╣)
+            updatePrayerTable();
+        }
+
+        function updatePrayerTable() {
+            const now = new Date();
+            const currentMin = now.getHours() * 60 + now.getMinutes();
+            let nextPrayer = prayers[0];
+            let found = false;
+
+            prayers.forEach(p => {
+                const [h, m] = p.time.split(':').map(Number);
+                const pMin = h * 60 + m;
+                document.getElementById('t-' + p.id).innerText = convertTo12Hr(p.time);
+
+                if (!found && pMin > currentMin && p.id !== 'sunrise') {
+                    nextPrayer = p;
+                    found = true;
                 }
-            }, 1000);
-            renderAll();
-        });
+            });
 
-        // Theme Toggle
-        const themeBtn = document.getElementById('theme-toggle');
-        themeBtn.addEventListener('click', () => {
-            const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        });
-
-        // Page Routing
-        function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
-            document.getElementById(`${pageId}-page`).classList.add('page-active');
-            window.scrollTo(0,0);
-        }
-
-        // Modals
-        function toggleModal(id) {
-            const modal = document.getElementById(id);
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        // --- Content Rendering ---
-        function renderAll() {
-            renderGrid('courses-grid', items.filter(i => i.type === 'course'));
-            renderGrid('books-grid', items.filter(i => i.type === 'book'));
-            renderGrid('favorites-grid', items.filter(i => i.fav === true));
-            renderAdminTable();
-            localStorage.setItem('lv_items', JSON.stringify(items));
-        }
-
-        function renderGrid(containerId, data) {
-            const container = document.getElementById(containerId);
-            if(!container) return;
-            container.innerHTML = data.map(item => `
-                <div class="card animate__animated animate__fadeInUp">
-                    <img src="${item.img}" class="card-img" alt="${item.title}">
-                    <div class="card-body">
-                        <span class="card-tag">${item.category}</span>
-                        <h3 class="card-title">${item.title}</h3>
-                        <div class="card-footer">
-                            <button class="btn btn-primary btn-sm" onclick="alert('Accessing Content...')">${item.type === 'book' ? 'Read Now' : 'Start Learning'}</button>
-                            <button class="fav-btn" onclick="toggleFavorite(${item.id})">
-                                <i class="${item.fav ? 'fas' : 'far'} fa-heart"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // --- Filtering ---
-        function filterCategory(cat, el) {
-            document.querySelectorAll('.cat-badge').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
+            document.getElementById('next-prayer-name').innerText = nextPrayer.name;
             
-            const filtered = cat === 'All' ? items : items.filter(i => i.category === cat);
-            renderGrid('courses-grid', filtered.filter(i => i.type === 'course'));
-            renderGrid('books-grid', filtered.filter(i => i.type === 'book'));
+            // ржХрж╛ржЙржирзНржЯржбрж╛ржЙржи
+            const [nh, nm] = nextPrayer.time.split(':').map(Number);
+            let diff = (nh * 60 + nm) - currentMin;
+            if (diff < 0) diff += 1440; // ржкрж░рзЗрж░ ржжрж┐ржи
+
+            const hours = Math.floor(diff / 60);
+            const mins = diff % 60;
+            document.getElementById('next-prayer-countdown').innerText = 
+                `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:00`;
+
+            // ржирж┐рж╖рж┐ржжрзНржз рж╕ржорзЯ ржЪрзЗржХ (рж╕рзВрж░рзНржпрзЛржжрзЯ ржУ рж╕рзВрж░рзНржпрж╛рж╕рзНржд)
+            const sunriseMin = 5 * 60 + 55;
+            const prohibited = (currentMin >= sunriseMin && currentMin <= sunriseMin + 15);
+            document.getElementById('prohibited-notice').style.display = prohibited ? 'block' : 'none';
         }
 
-        function filterItems() {
-            const query = document.getElementById('main-search').value.toLowerCase();
-            const filtered = items.filter(i => i.title.toLowerCase().includes(query));
-            renderGrid('courses-grid', filtered.filter(i => i.type === 'course'));
-            renderGrid('books-grid', filtered.filter(i => i.type === 'book'));
+        function convertTo12Hr(time) {
+            let [h, m] = time.split(':').map(Number);
+            const suffix = h >= 12 ? " ржкрж┐ржПржо" : " ржПржПржо";
+            h = h % 12 || 12;
+            return h + ":" + (m < 10 ? '0' + m : m) + suffix;
         }
 
-        // --- Favorites & State ---
-        function toggleFavorite(id) {
-            const index = items.findIndex(i => i.id === id);
-            items[index].fav = !items[index].fav;
-            renderAll();
+        // ржирзЗржнрж┐ржЧрзЗрж╢ржи
+        function nav(e, pageId) {
+            e.preventDefault();
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+
+            // рж╣рзЛржо ржЫрж╛рзЬрж╛ ржЕржирзНржп ржкрзЗржЬрзЗ рж╣рзЗржбрж╛рж░ ржЫрзЛржЯ ржХрж░рж╛
+            document.getElementById('main-header').style.display = (pageId === 'home') ? 'block' : 'none';
         }
 
-        // --- Admin Logic ---
-        function checkAdminAccess() {
-            const pass = prompt("Enter Admin Password (Hint: 1234):");
-            if(pass === "1234") {
-                showPage('admin');
-            } else {
-                alert("Access Denied!");
-            }
+        // рждрж╛рж╕ржмрж┐рж╣
+        function countTasbih() {
+            state.tasbih++;
+            document.getElementById('tasbih-display').innerText = state.tasbih;
+            if(navigator.vibrate) navigator.vibrate(50);
         }
 
-        function renderAdminTable() {
-            const tbody = document.getElementById('admin-table-body');
-            tbody.innerHTML = items.map(item => `
-                <tr>
-                    <td><img src="${item.img}" width="40" height="40" style="border-radius:5px; object-fit:cover;"></td>
-                    <td>${item.title}</td>
-                    <td style="text-transform:capitalize;">${item.type}</td>
-                    <td>${item.category}</td>
-                    <td>
-                        <button onclick="editItem(${item.id})" style="background:none; border:none; color:var(--primary); cursor:pointer; margin-right:10px;"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteItem(${item.id})" style="background:none; border:none; color:#ff4757; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+        function resetTasbih() {
+            state.tasbih = 0;
+            document.getElementById('tasbih-display').innerText = 0;
         }
 
-        function openItemModal() {
-            document.getElementById('modal-title').innerText = "Add Content";
-            document.getElementById('edit-id').value = "";
-            document.getElementById('item-title').value = "";
-            document.getElementById('item-image').value = "";
-            toggleModal('item-modal');
+        // ржЬрзЗрж▓рж╛ ржкрж░рж┐ржмрж░рзНрждржи
+        function changeDistrict(d) {
+            state.district = d;
+            document.getElementById('current-location-text').innerHTML = `<i class="fas fa-location-dot"></i> ${districts[d][2]}`;
+            alert(districts[d][2] + " ржЬрзЗрж▓рж╛ рж╕рзЗржЯ ржХрж░рж╛ рж╣рзЯрзЗржЫрзЗред");
         }
 
-        function closeItemModal() {
-            toggleModal('item-modal');
+        // ржбрж╛рж░рзНржХ ржорзЛржб
+        function toggleDarkMode() {
+            state.dark = !state.dark;
+            document.body.setAttribute('data-theme', state.dark ? 'dark' : 'light');
         }
 
-        function saveItem() {
-            const id = document.getElementById('edit-id').value;
-            const title = document.getElementById('item-title').value;
-            const type = document.getElementById('item-type').value;
-            const category = document.getElementById('item-category').value;
-            const img = document.getElementById('item-image').value || 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=500&q=80';
-
-            if(!title) return alert("Title is required");
-
-            if(id) {
-                const index = items.findIndex(i => i.id == id);
-                items[index] = {...items[index], title, type, category, img};
-            } else {
-                const newItem = {
-                    id: Date.now(),
-                    title, type, category, img, fav: false
-                };
-                items.push(newItem);
-            }
-
-            renderAll();
-            closeItemModal();
-        }
-
-        function editItem(id) {
-            const item = items.find(i => i.id === id);
-            document.getElementById('modal-title').innerText = "Edit Content";
-            document.getElementById('edit-id').value = item.id;
-            document.getElementById('item-title').value = item.title;
-            document.getElementById('item-type').value = item.type;
-            document.getElementById('item-category').value = item.category;
-            document.getElementById('item-image').value = item.img;
-            toggleModal('item-modal');
-        }
-
-        function deleteItem(id) {
-            if(confirm("Are you sure you want to delete this item?")) {
-                items = items.filter(i => i.id !== id);
-                renderAll();
+        // ржХрж┐ржмрж▓рж╛ (рж╕рж╣ржЬ рж╕ржВрж╕рзНржХрж░ржг)
+        function startCompass() {
+            alert("ржЖржкржирж╛рж░ ржбрж┐ржнрж╛ржЗрж╕рзЗрж░ ржХржорзНржкрж╛рж╕ рж╕рзЗржирзНрж╕рж░ рж╕ржХрзНрж░рж┐рзЯ ржХрж░рж╛рж░ ржЪрзЗрж╖рзНржЯрж╛ ржХрж░рж╛ рж╣ржЪрзНржЫрзЗред ржпржжрж┐ ржХрж╛ржЬ ржирж╛ ржХрж░рзЗ, рждржмрзЗ ржлрзЛржирзЗрж░ рж╕рзЗржЯрж┐ржВрж╕ ржерзЗржХрзЗ ржмрзНрж░рж╛ржЙржЬрж╛рж░рзЗрж░ ржХржорзНржкрж╛рж╕ ржкрж╛рж░ржорж┐рж╢ржи ржЪрзЗржХ ржХрж░рзБржиред");
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function(event) {
+                    let alpha = event.alpha; // ржЬрж┐рж░рзЛ ржорж╛ржирзЗ ржЙрждрзНрждрж░ ржжрж┐ржХ
+                    if(alpha) {
+                        // ржХрж┐ржмрж▓рж╛ ржмрж╛ржВрж▓рж╛ржжрзЗрж╢рзЗрж░ ржЬржирзНржп ржкрзНрж░рж╛рзЯ рзирзпрзй ржбрж┐ржЧрзНрж░рж┐
+                        document.getElementById('compass-img').style.transform = `rotate(${-alpha}deg)`;
+                    }
+                });
             }
         }
     </script>
