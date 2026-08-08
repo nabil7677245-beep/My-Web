@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>নামাজ বাংলাদেশ 🇧🇩</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #004d40;
+            --secondary: #00695c;
+            --accent: #d4af37;
+            --bg: #f0f4f3;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --danger: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #ecf0f1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: 0.3s;
+            padding-bottom: 80px;
+        }
+
+        /* লোডার */
+        #loader {
+            position: fixed; inset: 0; background: var(--primary);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 30px 20px 60px;
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            text-align: center;
+        }
+
+        .container { padding: 0 15px; margin-top: -40px; }
+
+        .main-card {
+            background: var(--card); border-radius: 20px; padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center;
+        }
+
+        .next-prayer-name { font-size: 2rem; color: var(--primary); font-weight: 700; margin: 5px 0; }
+        .countdown { font-family: 'Poppins'; font-size: 1.5rem; color: var(--danger); font-weight: 600; }
+
+        .prayer-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+        }
+
+        .prayer-item {
+            background: var(--card); padding: 15px; border-radius: 15px;
+            display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .prayer-item.active { border: 2px solid var(--primary); background: #e0f2f1; }
+        .prayer-time { font-weight: 700; font-size: 1.1rem; margin-top: 5px; }
+
+        .prohibited-zone {
+            background: #ffecb3; color: #856404; padding: 10px;
+            border-radius: 10px; margin-bottom: 15px; display: none; font-weight: bold;
+        }
+
+        /* বটম ন্যাভিগেশন */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--card); height: 70px; display: flex;
+            justify-content: space-around; align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        .nav-item { text-decoration: none; color: #95a5a6; text-align: center; font-size: 0.75rem; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+
+        .page { display: none; animation: fadeIn 0.4s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* তাসবিহ */
+        .tasbih-btn {
+            width: 200px; height: 200px; border-radius: 50%;
+            background: var(--primary); color: white; border: 8px solid var(--accent);
+            font-size: 3rem; margin: 30px auto; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; user-select: none;
+        }
+
+        .btn {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 20px; border-radius: 10px; width: 100%; font-size: 1rem;
+            cursor: pointer; margin-top: 10px;
+        }
+
+        select {
+            width: 100%; padding: 12px; border-radius: 10px; margin: 10px 0;
+            font-size: 1rem; border: 1px solid #ddd;
+        }
+        
+        .dua-card {
+            background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px;
+            text-align: right;
+        }
+        .arabic { font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
+        .bangla { text-align: left; font-size: 0.95rem; }
+
+        /* উন্নত কিবলা কম্পাস */
+        .compass-wrap {
+            max-width: 360px;
+            margin: 0 auto;
+        }
+        .compass-status {
+            background: rgba(0,77,64,.08);
+            color: var(--primary);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin: 12px 0;
+            font-size: .9rem;
+        }
+        [data-theme="dark"] .compass-status { background: rgba(255,255,255,.08); }
+        .compass-stage {
+            width: min(82vw, 310px);
+            aspect-ratio: 1;
+            margin: 18px auto;
+            position: relative;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff 0 55%, #e8efed 56% 64%, var(--primary) 65% 67%, #fff 68%);
+            box-shadow: 0 12px 30px rgba(0,0,0,.16), inset 0 0 0 8px rgba(212,175,55,.35);
+            overflow: hidden;
+        }
+        [data-theme="dark"] .compass-stage {
+            background: radial-gradient(circle, #222 0 55%, #18201f 56% 64%, #00695c 65% 67%, #222 68%);
+        }
+        .compass-ring {
+            position: absolute;
+            inset: 8%;
+            border: 2px dashed rgba(0,77,64,.28);
+            border-radius: 50%;
+        }
+        [data-theme="dark"] .compass-ring { border-color: rgba(255,255,255,.2); }
+        .compass-label {
+            position: absolute;
+            font-family: Poppins, sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .north { top: 8%; color: #d32f2f; }
+        .south { bottom: 8%; }
+        .east { right: 8%; }
+        .west { left: 8%; }
+        .needle {
+            position: absolute;
+            width: 8px;
+            height: 74%;
+            left: 50%;
+            top: 13%;
+            transform-origin: 50% 50%;
+            transition: transform .18s ease-out;
+        }
+        .needle::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            background: #d32f2f;
+            clip-path: polygon(50% 0, 100% 100%, 50% 82%, 0 100%);
+        }
+        .needle::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            background: #263238;
+            clip-path: polygon(50% 100%, 100% 0, 50% 18%, 0 0);
+        }
+        .compass-center {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 4px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,.25);
+            z-index: 3;
+        }
+        .qibla-marker {
+            position: absolute;
+            top: 3%;
+            left: 50%;
+            width: 4px;
+            height: 94%;
+            transform-origin: 50% 50%;
+            pointer-events: none;
+            transition: transform .18s ease-out;
+        }
+        .qibla-marker::before {
+            content: "🕋";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -8%);
+            font-size: 1.25rem;
+        }
+        .qibla-marker::after {
+            content: "";
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            left: 0;
+            width: 4px;
+            border-radius: 4px;
+            background: repeating-linear-gradient(to bottom, var(--accent) 0 8px, transparent 8px 15px);
+        }
+        .heading-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0 14px;
+        }
+        .heading-stat {
+            background: var(--bg);
+            border-radius: 14px;
+            padding: 10px;
+        }
+        .heading-stat small { display:block; opacity:.75; }
+        .heading-stat strong {
+            display:block;
+            font: 700 1.35rem Poppins, sans-serif;
+            margin-top: 2px;
+        }
+        .compass-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- লোডার স্ক্রিন -->
+    <div id="loader">
+        <i class="fas fa-mosque fa-3x" style="margin-bottom: 20px;"></i>
+        <h2>নামাজ বাংলাদেশ</h2>
+        <p>একটু অপেক্ষা করুন...</p>
+    </div>
+
+    <header id="main-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div id="current-location-text"><i class="fas fa-location-dot"></i> ঢাকা</div>
+            <div id="hijri-date-text">-- হিজরি</div>
+        </div>
+        <div style="margin-top: 20px;">
+            <h1 id="clock" style="font-size: 2.5rem; font-family: 'Poppins';">00:00:00</h1>
+            <p id="full-date">-- --- ----</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- হোম পেজ -->
+        <section id="home" class="page active">
+            <div class="main-card">
+                <div id="prohibited-notice" class="prohibited-zone">বর্তমানে নামাজ পড়া নিষিদ্ধ</div>
+                <p>পরবর্তী ওয়াক্ত</p>
+                <h2 id="next-prayer-name" class="next-prayer-name">--</h2>
+                <div id="next-prayer-countdown" class="countdown">00:00:00</div>
+            </div>
+
+            <div class="prayer-grid">
+                <div class="prayer-item" id="p-fajr"><span>ফজর</span><div class="prayer-time" id="t-fajr">--:--</div></div>
+                <div class="prayer-item" id="p-sunrise"><span>সূর্যোদয়</span><div class="prayer-time" id="t-sunrise">--:--</div></div>
+                <div class="prayer-item" id="p-dhuhr"><span>যোহর</span><div class="prayer-time" id="t-dhuhr">--:--</div></div>
+                <div class="prayer-item" id="p-asr"><span>আসর</span><div class="prayer-time" id="t-asr">--:--</div></div>
+                <div class="prayer-item" id="p-maghrib"><span>মাগরিব</span><div class="prayer-time" id="t-maghrib">--:--</div></div>
+                <div class="prayer-item" id="p-isha"><span>এশা</span><div class="prayer-time" id="t-isha">--:--</div></div>
+            </div>
+        </section>
+
+        <!-- কিবলা পেজ -->
+        <section id="qibla" class="page">
+            <div class="main-card">
+                <h3>উন্নত কিবলা কম্পাস</h3>
+                <p style="font-size:.85rem; margin-bottom:8px;">ফোনটি সমতল রেখে ধীরে ঘোরান</p>
+
+                <div class="compass-wrap">
+                    <div id="compass-status" class="compass-status">কম্পাস চালু করতে নিচের বোতামে চাপুন</div>
+
+                    <div class="compass-stage" id="compass-stage" aria-label="কিবলা কম্পাস">
+                        <div class="compass-ring"></div>
+                        <div class="compass-label north">N</div>
+                        <div class="compass-label east">E</div>
+                        <div class="compass-label south">S</div>
+                        <div class="compass-label west">W</div>
+                        <div class="qibla-marker" id="qibla-marker"></div>
+                        <div class="needle" id="compass-needle"></div>
+                        <div class="compass-center"></div>
+                    </div>
+
+                    <div class="heading-box">
+                        <div class="heading-stat">
+                            <small>বর্তমান দিক</small>
+                            <strong id="heading-degree">--°</strong>
+                        </div>
+                        <div class="heading-stat">
+                            <small>কিবলা</small>
+                            <strong id="qibla-degree">--°</strong>
+                        </div>
+                    </div>
+
+                    <div id="qibla-direction" class="compass-status">কিবলার দিক নির্ণয় হচ্ছে...</div>
+
+                    <div class="compass-actions">
+                        <button class="btn" onclick="startCompass()">🧭 কম্পাস চালু</button>
+                        <button class="btn" onclick="resetCompass()" style="background:#607d8b;">↻ রিসেট</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- তাসবিহ পেজ -->
+        <section id="tasbih" class="page">
+            <div class="main-card">
+                <h3 id="dhikr-name">সুবহানাল্লাহ</h3>
+                <div class="tasbih-btn" id="tasbih-display" onclick="countTasbih()">0</div>
+                <button class="btn" onclick="resetTasbih()" style="background: #7f8c8d;">রিসেট</button>
+                <select onchange="document.getElementById('dhikr-name').innerText = this.value">
+                    <option>সুবহানাল্লাহ</option>
+                    <option>আলহামদুলিল্লাহ</option>
+                    <option>আল্লাহু আকবার</option>
+                    <option>লা ইলাহা ইল্লাল্লাহ</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- দোয়া পেজ -->
+        <section id="dua" class="page">
+            <h3 style="margin-bottom: 15px;">প্রয়োজনীয় দোয়া</h3>
+            <div id="dua-container">
+                <!-- দোয়াস এখানে লোড হবে -->
+            </div>
+        </section>
+
+        <!-- সেটিংস পেজ -->
+        <section id="settings" class="page">
+            <div class="main-card" style="text-align: left;">
+                <h3>সেটিংস</h3>
+                <label>আপনার জেলা নির্বাচন করুন</label>
+                <select id="district-select" onchange="changeDistrict(this.value)">
+                    <!-- ৬৪ জেলা জাভাস্ক্রিপ্ট থেকে আসবে -->
+                </select>
+                <button class="btn" onclick="toggleDarkMode()">ডার্ক/লাইট মোড পরিবর্তন</button>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="nav(event, 'home')"><i class="fas fa-home"></i>হোম</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'qibla')"><i class="fas fa-compass"></i>কিবলা</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'tasbih')"><i class="fas fa-dharmachakra"></i>তাসবিহ</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'dua')"><i class="fas fa-hands-praying"></i>দোয়া</a>
+        <a href="#" class="nav-item" onclick="nav(event, 'settings')"><i class="fas fa-cog"></i>সেটিংস</a>
+    </nav>
+
+    <script>
+        // ডেটাবেস
+        const districts = {
+            "Dhaka": [23.8103, 90.4125, "ঢাকা"], "Chattogram": [22.3569, 91.7832, "চট্টগ্রাম"],
+            "Sylhet": [24.8949, 91.8687, "সিলেট"], "Rajshahi": [24.3745, 88.6042, "রাজশাহী"],
+            "Khulna": [22.8456, 89.5403, "খুলনা"], "Barishal": [22.7010, 90.3535, "বরিশাল"],
+            "Rangpur": [25.7439, 89.2752, "রংপুর"], "Mymensingh": [24.7471, 90.4203, "ময়মনসিংহ"],
+            "Cumilla": [23.4607, 91.1809, "কুমিল্লা"], "Gazipur": [24.0023, 90.4264, "গাজীপুর"],
+            "Narayanganj": [23.6238, 90.5000, "নারায়ণগঞ্জ"], "Bogra": [24.8481, 89.3730, "বগুড়া"]
+            // আরও জেলা এখানে যুক্ত করা যায়
+        };
+
+        const prayers = [
+            {id: 'fajr', name: 'ফজর', time: '04:35'},
+            {id: 'sunrise', name: 'সূর্যোদয়', time: '05:55'},
+            {id: 'dhuhr', name: 'যোহর', time: '12:05'},
+            {id: 'asr', name: 'আসর', time: '16:35'},
+            {id: 'maghrib', name: 'মাগরিব', time: '18:25'},
+            {id: 'isha', name: 'এশা', time: '19:45'}
+        ];
+
+        const duas = [
+            {a: "بِسْمِ اللَّهِ", b: "বিসমিল্লাহ", m: "আল্লাহর নামে শুরু করছি।"},
+            {a: "رَبِّ زِدْنِي عِلْمًا", b: "রাব্বি জিদনি ইলমা", m: "হে আমার প্রভু! আমার জ্ঞান বাড়িয়ে দিন।"},
+            {a: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", b: "রাব্বির হামহুমা কামা রাব্বায়ানি সাগিরা", m: "হে আমার প্রতিপালক! তাঁদের উভয়ের প্রতি দয়া করুন যেমন তাঁরা আমাকে শৈশবে লালন-পালন করেছেন।"}
+        ];
+
+        let state = {
+            district: 'Dhaka',
+            tasbih: 0,
+            dark: false
+        };
+
+        // কিবলা কম্পাসের হিসাব
+        const KAABA = { lat: 21.4225, lon: 39.8262 };
+        let compassStarted = false;
+        let compassHandler = null;
+        let currentHeading = null;
+        let qiblaBearing = null;
+
+        function normalizeDegree(deg) {
+            return (deg % 360 + 360) % 360;
+        }
+
+        function calculateBearing(lat1, lon1, lat2, lon2) {
+            const toRad = d => d * Math.PI / 180;
+            const toDeg = r => r * 180 / Math.PI;
+            const φ1 = toRad(lat1), φ2 = toRad(lat2);
+            const Δλ = toRad(lon2 - lon1);
+            const y = Math.sin(Δλ) * Math.cos(φ2);
+            const x = Math.cos(φ1) * Math.sin(φ2) -
+                      Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+            return normalizeDegree(toDeg(Math.atan2(y, x)));
+        }
+
+        function getQiblaBearing() {
+            const d = districts[state.district] || districts.Dhaka;
+            return calculateBearing(d[0], d[1], KAABA.lat, KAABA.lon);
+        }
+
+        function directionName(deg) {
+            const dirs = ['উত্তর', 'উত্তর-পূর্ব', 'পূর্ব', 'দক্ষিণ-পূর্ব',
+                          'দক্ষিণ', 'দক্ষিণ-পশ্চিম', 'পশ্চিম', 'উত্তর-পশ্চিম'];
+            return dirs[Math.round(normalizeDegree(deg) / 45) % 8];
+        }
+
+        function updateCompassUI(heading) {
+            if (!Number.isFinite(heading)) return;
+            currentHeading = normalizeDegree(heading);
+            qiblaBearing = getQiblaBearing();
+
+            document.getElementById('heading-degree').innerText =
+                Math.round(currentHeading) + '° ' + directionName(currentHeading);
+            document.getElementById('qibla-degree').innerText =
+                Math.round(qiblaBearing) + '°';
+
+            // ফোনের বর্তমান heading অনুযায়ী উত্তর/কিবলা মার্কার ঘোরানো
+            document.getElementById('compass-needle').style.transform =
+                `rotate(${-currentHeading}deg)`;
+            document.getElementById('qibla-marker').style.transform =
+                `rotate(${qiblaBearing - currentHeading}deg)`;
+
+            let diff = normalizeDegree(qiblaBearing - currentHeading);
+            if (diff > 180) diff -= 360;
+
+            const distance = Math.abs(diff);
+            const dirText = distance < 3
+                ? '🕋 আপনি এখন প্রায় কিবলার দিকে মুখ করে আছেন'
+                : `🕋 কিবলা পেতে ${Math.round(distance)}° ${diff > 0 ? 'ডানে' : 'বামে'} ঘুরুন`;
+            document.getElementById('qibla-direction').innerText = dirText;
+        }
+
+        function handleOrientation(event) {
+            let heading = null;
+
+            // iPhone/iPad Safari
+            if (typeof event.webkitCompassHeading === 'number' && event.webkitCompassHeading >= 0) {
+                heading = event.webkitCompassHeading;
+            } else if (typeof event.alpha === 'number') {
+                heading = 360 - event.alpha;
+            }
+
+            if (heading !== null) updateCompassUI(heading);
+        }
+
+        async function startCompass() {
+            const status = document.getElementById('compass-status');
+            try {
+                if (!window.DeviceOrientationEvent) {
+                    status.innerText = '⚠️ এই ব্রাউজার ডিভাইস কম্পাস সেন্সর সাপোর্ট করছে না।';
+                    return;
+                }
+
+                // iOS 13+ permission
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    if (permission !== 'granted') {
+                        status.innerText = '⚠️ কম্পাস পারমিশন দেওয়া হয়নি। ব্রাউজারের Permission থেকে Motion/Orientation অনুমতি দিন।';
+                        return;
+                    }
+                }
+
+                if (compassHandler) {
+                    window.removeEventListener('deviceorientation', compassHandler);
+                    window.removeEventListener('deviceorientationabsolute', compassHandler);
+                }
+
+                compassHandler = handleOrientation;
+                window.addEventListener('deviceorientation', compassHandler, true);
+                window.addEventListener('deviceorientationabsolute', compassHandler, true);
+
+                compassStarted = true;
+                qiblaBearing = getQiblaBearing();
+                document.getElementById('qibla-degree').innerText =
+                    Math.round(qiblaBearing) + '°';
+                status.innerText = `✅ কম্পাস চালু হয়েছে — ${districts[state.district][2]} থেকে কিবলা প্রায় ${Math.round(qiblaBearing)}°`;
+            } catch (err) {
+                console.error(err);
+                status.innerText = '⚠️ কম্পাস চালু করা যায়নি। HTTPS সাইটে খুলে আবার চেষ্টা করুন।';
+            }
+        }
+
+        function resetCompass() {
+            if (compassHandler) {
+                window.removeEventListener('deviceorientation', compassHandler);
+                window.removeEventListener('deviceorientationabsolute', compassHandler);
+            }
+            compassHandler = null;
+            compassStarted = false;
+            currentHeading = null;
+            document.getElementById('heading-degree').innerText = '--°';
+            document.getElementById('qibla-degree').innerText =
+                Math.round(getQiblaBearing()) + '°';
+            document.getElementById('compass-needle').style.transform = 'rotate(0deg)';
+            document.getElementById('qibla-marker').style.transform = 'rotate(0deg)';
+            document.getElementById('compass-status').innerText = 'কম্পাস বন্ধ করা হয়েছে। আবার চালু করতে বোতামে চাপুন।';
+            document.getElementById('qibla-direction').innerText = 'কিবলার দিক নির্ণয়ের জন্য কম্পাস চালু করুন।';
+        }
+
+        // অ্যাপ শুরু
+        window.onload = function() {
+            try {
+                initApp();
+            } catch (e) {
+                console.error(e);
+            } finally {
+                // ২ সেকেন্ড পর লোডার বন্ধ হবেই হবে
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 2000);
+            }
+        };
+
+        function initApp() {
+            // জেলা লিস্ট লোড
+            const select = document.getElementById('district-select');
+            for(let key in districts) {
+                let opt = document.createElement('option');
+                opt.value = key;
+                opt.innerText = districts[key][2];
+                select.appendChild(opt);
+            }
+
+            // দোয়া লোড
+            const duaBox = document.getElementById('dua-container');
+            duas.forEach(d => {
+                duaBox.innerHTML += `<div class="dua-card">
+                    <div class="arabic">${d.a}</div>
+                    <div class="bangla"><b>উচ্চারণ:</b> ${d.b}<br><b>অর্থ:</b> ${d.m}</div>
+                </div>`;
+            });
+
+            // ঘড়ি ও নামাজ আপডেট শুরু
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('bn-BD');
+            document.getElementById('full-date').innerText = now.toLocaleDateString('bn-BD', {day:'numeric', month:'long', year:'numeric'});
+
+            // নামাজের সময় আপডেট (কাল্পনিক অফসেটসহ)
+            updatePrayerTable();
+        }
+
+        function updatePrayerTable() {
+            const now = new Date();
+            const currentMin = now.getHours() * 60 + now.getMinutes();
+            let nextPrayer = prayers[0];
+            let found = false;
+
+            prayers.forEach(p => {
+                const [h, m] = p.time.split(':').map(Number);
+                const pMin = h * 60 + m;
+                document.getElementById('t-' + p.id).innerText = convertTo12Hr(p.time);
+
+                if (!found && pMin > currentMin && p.id !== 'sunrise') {
+                    nextPrayer = p;
+                    found = true;
+                }
+            });
+
+            document.getElementById('next-prayer-name').innerText = nextPrayer.name;
+            
+            // কাউন্টডাউন
+            const [nh, nm] = nextPrayer.time.split(':').map(Number);
+            let diff = (nh * 60 + nm) - currentMin;
+            if (diff < 0) diff += 1440; // পরের দিন
+
+            const hours = Math.floor(diff / 60);
+            const mins = diff % 60;
+            document.getElementById('next-prayer-countdown').innerText = 
+                `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:00`;
+
+            // নিষিদ্ধ সময় চেক (সূর্যোদয় ও সূর্যাস্ত)
+            const sunriseMin = 5 * 60 + 55;
+            const prohibited = (currentMin >= sunriseMin && currentMin <= sunriseMin + 15);
+            document.getElementById('prohibited-notice').style.display = prohibited ? 'block' : 'none';
+        }
+
+        function convertTo12Hr(time) {
+            let [h, m] = time.split(':').map(Number);
+            const suffix = h >= 12 ? " পিএম" : " এএম";
+            h = h % 12 || 12;
+            return h + ":" + (m < 10 ? '0' + m : m) + suffix;
+        }
+
+        // নেভিগেশন
+        function nav(e, pageId) {
+            e.preventDefault();
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+
+            // হোম ছাড়া অন্য পেজে হেডার ছোট করা
+            document.getElementById('main-header').style.display = (pageId === 'home') ? 'block' : 'none';
+        }
+
+        // তাসবিহ
+        function countTasbih() {
+            state.tasbih++;
+            document.getElementById('tasbih-display').innerText = state.tasbih;
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
+
+        function resetTasbih() {
+            state.tasbih = 0;
+            document.getElementById('tasbih-display').innerText = 0;
+        }
+
+        // জেলা পরিবর্তন
+        function changeDistrict(d) {
+            state.district = d;
+            document.getElementById('current-location-text').innerHTML = `<i class="fas fa-location-dot"></i> ${districts[d][2]}`;
+            if (document.getElementById('qibla-degree')) {
+                document.getElementById('qibla-degree').innerText = Math.round(getQiblaBearing()) + '°';
+                if (currentHeading !== null) updateCompassUI(currentHeading);
+            }
+            alert(districts[d][2] + " জেলা সেট করা হয়েছে।");
+        }
+
+        // ডার্ক মোড
+        function toggleDarkMode() {
+            state.dark = !state.dark;
+            document.body.setAttribute('data-theme', state.dark ? 'dark' : 'light');
+        }
+
+
+    </script>
+</body>
+</html>
